@@ -6,76 +6,63 @@
 <title>Activity Tracker</title>
 <style>
   :root {
-    --bg: #fdf8f3;
-    --surface: #fffaf3;
-    --surface-2: #f5ebdc;
-    --border: rgba(120, 80, 50, 0.15);
-    --border-strong: rgba(120, 80, 50, 0.3);
-    --text: #3d2817;
-    --text-2: #7a5a3f;
-    --text-3: #a48060;
-    --danger-bg: #fde4d4;
-    --danger-text: #7c2d12;
-    --info-bg: #fef3e2;
-    --amber-bg: #fef0d4;
-    --amber-text: #78350f;
-    --green-bg: #ebe5c7;
-    --green-text: #3f3210;
-    /* Warm status colors */
-    --status-todo: #c4a484;
-    --status-progress: #d97706;
-    --status-testing: #ca8a04;
-    --status-done: #65a30d;
-    --accent: #c2410c;
-    --accent-2: #ea580c;
+    --bg: #faf9f5;
+    --surface: #ffffff;
+    --surface-2: #f1efe8;
+    --border: rgba(0,0,0,0.12);
+    --border-strong: rgba(0,0,0,0.2);
+    --text: #1a1a1a;
+    --text-2: #555;
+    --text-3: #888;
+    --danger-bg: #FCEBEB;
+    --danger-text: #501313;
+    --info-bg: #E6F1FB;
+    --amber-bg: #FAEEDA;
+    --amber-text: #412402;
+    --green-bg: #E1F5EE;
+    --green-text: #04342C;
+    --status-todo: #94a3b8;
+    --status-progress: #f59e0b;
+    --status-testing: #3b82f6;
+    --status-done: #10b981;
+    --accent: #6366f1;
+    --accent-2: #8b5cf6;
     --radius: 8px;
     --radius-lg: 12px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1f1611;
-      --surface: #2a1e16;
-      --surface-2: #3a2a1f;
-      --border: rgba(230, 200, 160, 0.18);
-      --border-strong: rgba(230, 200, 160, 0.3);
-      --text: #f5e6d3;
-      --text-2: #d4b896;
-      --text-3: #a48060;
-      --accent: #f97316;
-      --accent-2: #fb923c;
+      --bg: #1a1a1a;
+      --surface: #262626;
+      --surface-2: #2f2f2f;
+      --border: rgba(255,255,255,0.12);
+      --border-strong: rgba(255,255,255,0.2);
+      --text: #f5f5f5;
+      --text-2: #b8b8b8;
+      --text-3: #888;
     }
-    /* Dark-mode column tints — warm, cozy, fireside */
-    .col[data-status="todo"] { background: linear-gradient(135deg, #4a3826 0%, #5c4a36 100%) !important; border-color: #8b6f4d !important; }
-    .col[data-status="progress"] { background: linear-gradient(135deg, #5c2e0a 0%, #92400e 100%) !important; border-color: #d97706 !important; }
-    .col[data-status="testing"] { background: linear-gradient(135deg, #5a4118 0%, #854d0e 100%) !important; border-color: #ca8a04 !important; }
-    .col[data-status="done"] { background: linear-gradient(135deg, #365314 0%, #4d7c0f 100%) !important; border-color: #84cc16 !important; }
-    .col-title { color: #f5e6d3 !important; }
-    .col-head { border-bottom-color: rgba(245, 230, 211, 0.2) !important; }
-    .col-count { background: rgba(245, 230, 211, 0.25) !important; color: #fef3c7 !important; font-weight: 700 !important; }
-    .empty { border-color: rgba(245, 230, 211, 0.2) !important; background: rgba(245, 230, 211, 0.06) !important; color: rgba(245, 230, 211, 0.7) !important; }
-    /* Dark-mode card colors — warm gradient family */
-    .card[data-project-color="0"] { background: linear-gradient(135deg, #92400e 0%, #c2410c 100%) !important; color: #fef3c7 !important; }
-    .card[data-project-color="1"] { background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%) !important; color: #fef3c7 !important; }
-    .card[data-project-color="2"] { background: linear-gradient(135deg, #4d7c0f 0%, #65a30d 100%) !important; color: #f7fee7 !important; }
-    .card[data-project-color="3"] { background: linear-gradient(135deg, #b45309 0%, #d97706 100%) !important; color: #fffbeb !important; }
-    .card[data-project-color="4"] { background: linear-gradient(135deg, #9f1239 0%, #be185d 100%) !important; color: #fdf2f8 !important; }
-    .card[data-project-color="5"] { background: linear-gradient(135deg, #3f6212 0%, #65a30d 100%) !important; color: #f7fee7 !important; }
-    .card[data-project-color="6"] { background: linear-gradient(135deg, #a16207 0%, #ca8a04 100%) !important; color: #fef9c3 !important; }
-    .card[data-project-color="7"] { background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%) !important; color: #fef2f2 !important; }
-    .card[data-project-color="8"] { background: linear-gradient(135deg, #57534e 0%, #78716c 100%) !important; color: #fafaf9 !important; }
-    .card { box-shadow: 0 4px 12px rgba(40, 20, 5, 0.4) !important; }
-    .card:hover { box-shadow: 0 8px 20px rgba(40, 20, 5, 0.5), 0 0 0 1px rgba(245, 230, 211, 0.15) !important; }
-    .tag { background: rgba(245, 230, 211, 0.25) !important; color: #fef3c7 !important; font-weight: 600 !important; }
-    .icon-btn { background: rgba(245, 230, 211, 0.15) !important; color: rgba(245, 230, 211, 0.9) !important; }
-    .icon-btn:hover { background: rgba(245, 230, 211, 0.3) !important; }
-    .card-desc-preview, .card-meta { color: rgba(245, 230, 211, 0.85) !important; }
-    .desc-indicator, .card-created { color: rgba(245, 230, 211, 0.7) !important; }
-    .prio.high { background: #dc2626 !important; box-shadow: 0 0 8px rgba(220, 38, 38, 0.5); }
-    .prio.med { background: #d97706 !important; box-shadow: 0 0 8px rgba(217, 119, 6, 0.4); }
-    .prio.low { background: #84cc16 !important; box-shadow: 0 0 8px rgba(132, 204, 22, 0.4); }
-    .hero { background: linear-gradient(135deg, #2a1e16 0%, #3a2a1f 100%) !important; }
-    .logo { box-shadow: 0 4px 20px rgba(249, 115, 22, 0.5) !important; }
-    .progress-ring-bg { stroke: rgba(245, 230, 211, 0.12) !important; }
+    /* Dark-mode column tints — deeper, richer tones */
+    .col[data-status="todo"] { background: #2c3340 !important; border-color: #475569 !important; }
+    .col[data-status="progress"] { background: #3d2e15 !important; border-color: #b45309 !important; }
+    .col[data-status="testing"] { background: #1e2a47 !important; border-color: #1d4ed8 !important; }
+    .col[data-status="done"] { background: #14352d !important; border-color: #047857 !important; }
+    .col-title { color: rgba(255,255,255,0.85) !important; }
+    .col-head { border-bottom-color: rgba(255,255,255,0.1) !important; }
+    .col-count { background: rgba(0,0,0,0.35) !important; color: #e5e5e5 !important; }
+    .empty { border-color: rgba(255,255,255,0.15) !important; background: rgba(255,255,255,0.03) !important; }
+    /* Dark-mode card colors — saturated, readable on dark */
+    .card[data-project-color="0"] { background: #1e3a5f !important; color: #cfe2ff !important; }
+    .card[data-project-color="1"] { background: #2e2861 !important; color: #ddd9ff !important; }
+    .card[data-project-color="2"] { background: #134e3e !important; color: #c8f0e0 !important; }
+    .card[data-project-color="3"] { background: #4a2218 !important; color: #ffd5c8 !important; }
+    .card[data-project-color="4"] { background: #4a1f33 !important; color: #ffd0e0 !important; }
+    .card[data-project-color="5"] { background: #2a3d12 !important; color: #d9eebd !important; }
+    .card[data-project-color="6"] { background: #4d3308 !important; color: #ffe0b0 !important; }
+    .card[data-project-color="7"] { background: #5a1f1f !important; color: #ffcdcd !important; }
+    .card[data-project-color="8"] { background: #3a3a36 !important; color: #e5e5e0 !important; }
+    .tag { background: rgba(255,255,255,0.15) !important; color: inherit !important; }
+    .icon-btn { background: rgba(255,255,255,0.08) !important; }
+    .icon-btn:hover { background: rgba(255,255,255,0.18) !important; }
   }
   * { box-sizing: border-box; }
   body {
@@ -290,10 +277,10 @@
 
   .board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
   .col { border-radius: var(--radius); padding: 14px 12px; min-height: 250px; border: 1px solid; transition: background 0.2s; }
-  .col[data-status="todo"] { background: #f0e4d2; border-color: #d4b896; }
-  .col[data-status="progress"] { background: #fde3c0; border-color: #f5a85e; }
-  .col[data-status="testing"] { background: #fef0d4; border-color: #f0c674; }
-  .col[data-status="done"] { background: #e8e3c0; border-color: #b8b878; }
+  .col[data-status="todo"] { background: #f1f5f9; border-color: #cbd5e1; }
+  .col[data-status="progress"] { background: #fef3c7; border-color: #fcd34d; }
+  .col[data-status="testing"] { background: #dbeafe; border-color: #93c5fd; }
+  .col[data-status="done"] { background: #d1fae5; border-color: #6ee7b7; }
   .col-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 4px 8px; border-bottom: 1px dashed rgba(0,0,0,0.1); }
   .col-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(0,0,0,0.75); }
   .col-title::before { content: ''; width: 10px; height: 10px; border-radius: 50%; }
@@ -641,15 +628,15 @@
   const COL_COLLAPSE_KEY = 'joe-cols-v4';
 
   const COLORS = [
-    { bg: '#fde3c0', text: '#7c2d12' }, { bg: '#fef0d4', text: '#78350f' },
-    { bg: '#ebe5c7', text: '#3f3210' }, { bg: '#f4d8c0', text: '#6b3a18' },
-    { bg: '#f5d4c0', text: '#5b2e0a' }, { bg: '#e8e0c0', text: '#3d3a0e' },
-    { bg: '#fdf0d8', text: '#854d0e' }, { bg: '#fde4d4', text: '#7c2d12' },
-    { bg: '#ede4d3', text: '#4a3826' },
+    { bg: '#E6F1FB', text: '#042C53' }, { bg: '#EEEDFE', text: '#26215C' },
+    { bg: '#E1F5EE', text: '#04342C' }, { bg: '#FAECE7', text: '#4A1B0C' },
+    { bg: '#FBEAF0', text: '#4B1528' }, { bg: '#EAF3DE', text: '#173404' },
+    { bg: '#FAEEDA', text: '#412402' }, { bg: '#FCEBEB', text: '#501313' },
+    { bg: '#F1EFE8', text: '#2C2C2A' },
   ];
 
   const STATUS_COLORS = {
-    todo: '#c4a484', progress: '#d97706', testing: '#ca8a04', done: '#65a30d'
+    todo: '#94a3b8', progress: '#f59e0b', testing: '#3b82f6', done: '#10b981'
   };
   const STATUS_LABEL = { todo: 'To do', progress: 'In progress', testing: 'Testing', done: 'Done' };
 
@@ -1268,9 +1255,10 @@
             <div class="modal-row"><label>Due date</label><input type="date" id="em-due" value="${t.due || ''}" /></div>
           </div>
           <div class="modal-actions">
-            <span style="margin-right: auto; font-size: 11px; color: var(--text-3);">✓ Changes save automatically</span>
-            <button class="primary" id="em-save">Close</button>
+            <button id="em-cancel">Cancel</button>
+            <button class="primary" id="em-save">Save</button>
           </div></div></div>`;
+    document.getElementById('em-cancel').onclick = () => host.innerHTML = '';
     document.getElementById('modal-bg').onclick = (e) => { if (e.target.id === 'modal-bg') host.innerHTML = ''; };
 
     // Working points: ensure array exists, then render + wire up
@@ -1365,7 +1353,7 @@
     };
     renderTagPick();
 
-    const autoSave = () => {
+    const saveAndClose = () => {
       const wasDone = t.status === 'done';
       t.title = document.getElementById('em-title').value.trim() || t.title;
       t.description = document.getElementById('em-description').value;
@@ -1375,18 +1363,10 @@
       t.due = document.getElementById('em-due').value;
       if (t.status === 'done' && !wasDone) t.completedAt = new Date().toISOString();
       if (t.status !== 'done') t.completedAt = null;
-      scheduleSave();
-      renderBoard(); renderDashboard(); updateRing();
+      scheduleSave(); renderAll();
+      host.innerHTML = '';
     };
-    const saveAndClose = () => { autoSave(); host.innerHTML = ''; };
     document.getElementById('em-save').onclick = saveAndClose;
-    // Auto-save: any change to title/description/project/priority/status/due commits immediately
-    ['em-title', 'em-description', 'em-project', 'em-priority', 'em-status', 'em-due'].forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.addEventListener('input', autoSave);
-      el.addEventListener('change', autoSave);
-    });
     document.getElementById('em-description').addEventListener('keydown', e => {
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); saveAndClose(); }
     });
