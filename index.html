@@ -420,6 +420,17 @@
     display: flex; align-items: center; gap: 8px;
     padding: 14px 14px 10px;
     border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .col-head .col-title {
+    flex: 1;
+    text-align: center;
+  }
+  .col-head .btn[data-rename-btn] {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
   }
   .col-dot { width: 8px; height: 8px; border-radius: 50%; }
   .col[data-status="todo"] .col-dot { background: var(--status-todo); }
@@ -967,36 +978,36 @@
         <div class="board" id="board">
           <div class="col" data-status="todo">
             <div class="col-head">
+              <button class="btn" style="padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="todo" title="Rename column">✎</button>
               <span class="col-dot"></span>
               <span class="col-title" data-rename-status="todo">To do</span>
-              <button class="btn" style="margin-left: auto; padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="todo" title="Rename column">✎</button>
               <span class="col-count" id="count-todo">0</span>
             </div>
             <div class="col-body" data-body="todo"></div>
           </div>
           <div class="col" data-status="progress">
             <div class="col-head">
+              <button class="btn" style="padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="progress" title="Rename column">✎</button>
               <span class="col-dot"></span>
               <span class="col-title" data-rename-status="progress">In progress</span>
-              <button class="btn" style="margin-left: auto; padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="progress" title="Rename column">✎</button>
               <span class="col-count" id="count-progress">0</span>
             </div>
             <div class="col-body" data-body="progress"></div>
           </div>
           <div class="col" data-status="testing">
             <div class="col-head">
+              <button class="btn" style="padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="testing" title="Rename column">✎</button>
               <span class="col-dot"></span>
               <span class="col-title" data-rename-status="testing">Testing</span>
-              <button class="btn" style="margin-left: auto; padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="testing" title="Rename column">✎</button>
               <span class="col-count" id="count-testing">0</span>
             </div>
             <div class="col-body" data-body="testing"></div>
           </div>
           <div class="col" data-status="done">
             <div class="col-head">
+              <button class="btn" style="padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="done" title="Rename column">✎</button>
               <span class="col-dot"></span>
               <span class="col-title" data-rename-status="done">Done</span>
-              <button class="btn" style="margin-left: auto; padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="done" title="Rename column">✎</button>
               <span class="col-count" id="count-done">0</span>
             </div>
             <div class="col-body" data-body="done"></div>
