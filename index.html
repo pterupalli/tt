@@ -404,6 +404,9 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 14px;
   }
+  .board.show-archived {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
   .col {
     background: var(--surface);
     border-radius: var(--radius-lg);
@@ -686,37 +689,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Heatmap */
-  .heatmap-card { grid-column: span 2; }
-  .heatmap {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 3px;
-    margin-top: 4px;
-  }
-  .heat-cell {
-    aspect-ratio: 1;
-    border-radius: 2px;
-    background: var(--surface-2);
-    position: relative;
-  }
-  .heat-cell[data-level="0"] { background: var(--surface-2); }
-  .heat-cell[data-level="1"] { background: #c7e7d4; }
-  .heat-cell[data-level="2"] { background: #74d2a3; }
-  .heat-cell[data-level="3"] { background: #00b388; }
-  .heat-cell[data-level="4"] { background: #00805f; }
-  html[data-theme="dark"] .heat-cell[data-level="0"] { background: var(--surface-2); }
-  html[data-theme="dark"] .heat-cell[data-level="1"] { background: #1d3a2a; }
-  html[data-theme="dark"] .heat-cell[data-level="2"] { background: #266149; }
-  html[data-theme="dark"] .heat-cell[data-level="3"] { background: #34d399; }
-  html[data-theme="dark"] .heat-cell[data-level="4"] { background: #6ee7b7; }
-  .heatmap-legend {
-    display: flex; align-items: center; justify-content: flex-end; gap: 6px;
-    font-size: 10px; color: var(--text-3);
-    margin-top: 8px;
-  }
-  .heat-legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
-
   /* By-project breakdown */
   .proj-rows { display: flex; flex-direction: column; gap: 10px; }
   .proj-row {
@@ -993,10 +965,57 @@
         </div>
 
         <div class="board" id="board">
-          <div class="col" data-status="todo"><div class="col-head"><span class="col-dot"></span><span class="col-title">To do</span><span class="col-count" id="count-todo">0</span></div><div class="col-body" data-body="todo"></div></div>
-          <div class="col" data-status="progress"><div class="col-head"><span class="col-dot"></span><span class="col-title">In progress</span><span class="col-count" id="count-progress">0</span></div><div class="col-body" data-body="progress"></div></div>
-          <div class="col" data-status="testing"><div class="col-head"><span class="col-dot"></span><span class="col-title">Testing</span><span class="col-count" id="count-testing">0</span></div><div class="col-body" data-body="testing"></div></div>
-          <div class="col" data-status="done"><div class="col-head"><span class="col-dot"></span><span class="col-title">Done</span><span class="col-count" id="count-done">0</span></div><div class="col-body" data-body="done"></div></div>
+          <div class="col" data-status="todo">
+            <div class="col-head">
+              <span class="col-dot"></span>
+              <span class="col-title" data-rename-status="todo">To do</span>
+              <button class="btn" style="margin-left: auto; padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="todo" title="Rename column">✎</button>
+              <span class="col-count" id="count-todo">0</span>
+            </div>
+            <div class="col-body" data-body="todo"></div>
+          </div>
+          <div class="col" data-status="progress">
+            <div class="col-head">
+              <span class="col-dot"></span>
+              <span class="col-title" data-rename-status="progress">In progress</span>
+              <button class="btn" style="margin-left: auto; padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="progress" title="Rename column">✎</button>
+              <span class="col-count" id="count-progress">0</span>
+            </div>
+            <div class="col-body" data-body="progress"></div>
+          </div>
+          <div class="col" data-status="testing">
+            <div class="col-head">
+              <span class="col-dot"></span>
+              <span class="col-title" data-rename-status="testing">Testing</span>
+              <button class="btn" style="margin-left: auto; padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="testing" title="Rename column">✎</button>
+              <span class="col-count" id="count-testing">0</span>
+            </div>
+            <div class="col-body" data-body="testing"></div>
+          </div>
+          <div class="col" data-status="done">
+            <div class="col-head">
+              <span class="col-dot"></span>
+              <span class="col-title" data-rename-status="done">Done</span>
+              <button class="btn" style="margin-left: auto; padding: 3px 6px; font-size: 10px; opacity: 0.6;" data-rename-btn="done" title="Rename column">✎</button>
+              <span class="col-count" id="count-done">0</span>
+            </div>
+            <div class="col-body" data-body="done"></div>
+          </div>
+          <div class="col hidden" id="archived-col" data-status="archived" style="background: var(--surface-2);">
+            <div class="col-head">
+              <span class="col-dot" style="background: var(--text-3);"></span>
+              <span class="col-title">Archived</span>
+              <span class="col-count" id="count-archived">0</span>
+              <button class="btn" id="btn-clear-archived" style="margin-left: auto; padding: 4px 8px; font-size: 11px; color: var(--danger);" title="Permanently delete all archived tasks">🗑️</button>
+            </div>
+            <div class="col-body" data-body="archived"></div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; display: flex; align-items: center; gap: 8px;">
+          <button class="btn" id="btn-toggle-archived" style="font-size: 12px;">
+            <span id="archived-icon">📦</span> Show Archived (<span id="archived-count">0</span>)
+          </button>
         </div>
       </section>
 
@@ -1037,21 +1056,7 @@
           </div>
         </div>
 
-        <div class="dash-grid" style="grid-template-columns: 1fr;">
-          <div class="dash-card">
-            <div class="dash-card-title">Activity heatmap <span class="dash-card-sub">last 84 days</span></div>
-            <div class="heatmap" id="heatmap"></div>
-            <div class="heatmap-legend">
-              Less
-              <div class="heat-legend-swatch" data-level="0" style="background: var(--surface-2)"></div>
-              <div class="heat-legend-swatch" data-level="1" style="background: #c7e7d4"></div>
-              <div class="heat-legend-swatch" data-level="2" style="background: #74d2a3"></div>
-              <div class="heat-legend-swatch" data-level="3" style="background: #00b388"></div>
-              <div class="heat-legend-swatch" data-level="4" style="background: #00805f"></div>
-              More
-            </div>
-          </div>
-        </div>
+
       </section>
     </div>
   </main>
@@ -1099,17 +1104,21 @@
   const TASKS_KEY = 'joe-tasks-v4';
   const PROJECTS_KEY = 'joe-projects-v4';
   const TAGS_KEY = 'joe-tags-v4';
+  const ARCHIVED_KEY = 'joe-archived-v4';
   const SYNC_KEY = 'joe-fb-sync-v4';
   const VIEW_KEY = 'joe-view-v5';
   const THEME_KEY = 'joe-theme-v4';
+  const LABELS_KEY = 'joe-labels-v4';
 
   // ===== STATE =====
   let tasks = [];
   let projects = [];
   let tags = [];
+  let archivedTasks = [];
   let filters = { project: 'all', priority: 'all', tag: 'all' };
-  let view = { currentView: 'board' };
+  let view = { currentView: 'board', showArchived: false };
   let sync = { secret: '', lastSync: null };
+  let columnLabels = { todo: 'To do', progress: 'In progress', testing: 'Testing', done: 'Done' };
   let saveTimer = null;
   let fbUnsubscribe = null;
   let remoteEcho = null;
@@ -1131,7 +1140,6 @@
     testing: 'var(--status-testing)',
     done: 'var(--status-done)'
   };
-  const STATUS_LABELS = { todo: 'To do', progress: 'In progress', testing: 'Testing', done: 'Done' };
   const PRIO_LABELS = { high: 'High', med: 'Med', low: 'Low' };
 
   // ===== HELPERS =====
@@ -1154,7 +1162,12 @@
     try { tasks = JSON.parse(localStorage.getItem(TASKS_KEY) || '[]'); } catch (e) { tasks = []; }
     try { projects = JSON.parse(localStorage.getItem(PROJECTS_KEY) || 'null'); } catch (e) { projects = null; }
     try { tags = JSON.parse(localStorage.getItem(TAGS_KEY) || '[]'); } catch (e) { tags = []; }
+    try { archivedTasks = JSON.parse(localStorage.getItem(ARCHIVED_KEY) || '[]'); } catch (e) { archivedTasks = []; }
     try { sync = JSON.parse(localStorage.getItem(SYNC_KEY) || 'null') || sync; } catch (e) {}
+    try {
+      const labels = JSON.parse(localStorage.getItem(LABELS_KEY) || 'null');
+      if (labels) columnLabels = labels;
+    } catch (e) {}
     try {
       const v = JSON.parse(localStorage.getItem(VIEW_KEY) || 'null');
       if (v) view = Object.assign(view, v);
@@ -1170,8 +1183,10 @@
   function saveTasksLocal() { try { localStorage.setItem(TASKS_KEY, JSON.stringify(tasks)); } catch (e) {} }
   function saveProjectsLocal() { try { localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects)); } catch (e) {} }
   function saveTagsLocal() { try { localStorage.setItem(TAGS_KEY, JSON.stringify(tags)); } catch (e) {} }
+  function saveArchivedLocal() { try { localStorage.setItem(ARCHIVED_KEY, JSON.stringify(archivedTasks)); } catch (e) {} }
   function saveSyncLocal() { try { localStorage.setItem(SYNC_KEY, JSON.stringify(sync)); } catch (e) {} }
   function saveViewLocal() { try { localStorage.setItem(VIEW_KEY, JSON.stringify(view)); } catch (e) {} }
+  function saveLabelsLocal() { try { localStorage.setItem(LABELS_KEY, JSON.stringify(columnLabels)); } catch (e) {} }
 
   // ===== FIREBASE SYNC =====
   function syncConfigured() { return !!sync.secret; }
@@ -1188,7 +1203,8 @@
         if (Array.isArray(data.tasks)) tasks = data.tasks;
         if (Array.isArray(data.projects) && data.projects.length > 0) projects = data.projects;
         if (Array.isArray(data.tags)) tags = data.tags;
-        saveTasksLocal(); saveProjectsLocal(); saveTagsLocal();
+        if (Array.isArray(data.archivedTasks)) archivedTasks = data.archivedTasks;
+        saveTasksLocal(); saveProjectsLocal(); saveTagsLocal(); saveArchivedLocal();
         renderAll();
       }
       sync.lastSync = new Date().toISOString(); saveSyncLocal();
@@ -1201,7 +1217,7 @@
     if (!syncConfigured() || !window.fbDb) return;
     setSyncStatus('warn', 'Saving...');
     try {
-      const payload = { projects, tasks, tags, updated: new Date().toISOString() };
+      const payload = { projects, tasks, tags, archivedTasks, updated: new Date().toISOString() };
       remoteEcho = payload.updated;
       await window.fbDb.write(sync.secret, payload);
       sync.lastSync = new Date().toISOString(); saveSyncLocal();
@@ -1220,13 +1236,14 @@
       if (Array.isArray(data.tasks)) tasks = data.tasks;
       if (Array.isArray(data.projects) && data.projects.length > 0) projects = data.projects;
       if (Array.isArray(data.tags)) tags = data.tags;
-      saveTasksLocal(); saveProjectsLocal(); saveTagsLocal();
+      if (Array.isArray(data.archivedTasks)) archivedTasks = data.archivedTasks;
+      saveTasksLocal(); saveProjectsLocal(); saveTagsLocal(); saveArchivedLocal();
       renderAll();
       setSyncStatus('ok', 'Synced just now');
     });
   }
   function scheduleSave() {
-    saveTasksLocal(); saveProjectsLocal(); saveTagsLocal();
+    saveTasksLocal(); saveProjectsLocal(); saveTagsLocal(); saveArchivedLocal();
     if (!syncConfigured()) { setSyncStatus('off', 'Sync not configured'); return; }
     setSyncStatus('warn', 'Unsaved...');
     if (saveTimer) clearTimeout(saveTimer);
@@ -1413,8 +1430,13 @@
     }).join('')}</div>` : '';
     const createdStr = t.created ? new Date(t.created).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : '';
     const matchClass = searchQuery ? 'search-match' : '';
+    const isArchived = t.archived === true;
+    const archiveBtn = isArchived 
+      ? `<button class="card-icon-btn" data-unarchive="${t.id}" title="Restore from archive" style="background: var(--success-soft); color: var(--success);">↶</button>`
+      : `<button class="card-icon-btn" data-archive="${t.id}" title="Archive task">📦</button>`;
     return `<div class="card ${matchClass}" draggable="true" data-id="${t.id}" style="border-left-color:${pColor}">
         <div class="card-actions">
+          ${archiveBtn}
           <button class="card-icon-btn" data-del="${t.id}" title="Delete">✕</button>
         </div>
         <div class="card-top">
@@ -1438,6 +1460,8 @@
     statuses.forEach(s => {
       const filtered = tasks.filter(t => t.status === s && passesFilter(t));
       const body = document.querySelector(`[data-body="${s}"]`);
+      const labelEl = document.querySelector(`[data-rename-status="${s}"]`);
+      if (labelEl) labelEl.textContent = columnLabels[s];
       const total = tasks.filter(t => t.status === s).length;
       $('count-' + s).textContent = filtered.length === total ? total : `${filtered.length}/${total}`;
       if (filtered.length === 0) {
@@ -1446,6 +1470,20 @@
         body.innerHTML = filtered.map(cardHtml).join('');
       }
     });
+    
+    // Render archived if shown
+    if (view.showArchived) {
+      const archivedBody = document.querySelector(`[data-body="archived"]`);
+      const filtered = archivedTasks.filter(passesFilter);
+      $('count-archived').textContent = archivedTasks.length;
+      if (filtered.length === 0) {
+        archivedBody.innerHTML = `<div class="empty">No archived tasks</div>`;
+      } else {
+        archivedBody.innerHTML = filtered.map(t => ({ ...t, archived: true })).map(cardHtml).join('');
+      }
+    }
+    
+    $('archived-count').textContent = archivedTasks.length;
     attachCardHandlers();
   }
 
@@ -1464,9 +1502,35 @@
     document.querySelectorAll('[data-del]').forEach(b => {
       b.onclick = (e) => {
         e.stopPropagation();
+        const taskId = b.dataset.del;
         if (!confirm('Delete this task?')) return;
-        tasks = tasks.filter(t => t.id !== b.dataset.del);
+        tasks = tasks.filter(t => t.id !== taskId);
+        archivedTasks = archivedTasks.filter(t => t.id !== taskId);
         scheduleSave(); renderAll();
+      };
+    });
+    document.querySelectorAll('[data-archive]').forEach(b => {
+      b.onclick = (e) => {
+        e.stopPropagation();
+        const taskId = b.dataset.archive;
+        const task = tasks.find(t => t.id === taskId);
+        if (task) {
+          tasks = tasks.filter(t => t.id !== taskId);
+          archivedTasks.push(task);
+          scheduleSave(); renderAll();
+        }
+      };
+    });
+    document.querySelectorAll('[data-unarchive]').forEach(b => {
+      b.onclick = (e) => {
+        e.stopPropagation();
+        const taskId = b.dataset.unarchive;
+        const task = archivedTasks.find(t => t.id === taskId);
+        if (task) {
+          archivedTasks = archivedTasks.filter(t => t.id !== taskId);
+          tasks.push(task);
+          scheduleSave(); renderAll();
+        }
       };
     });
     document.querySelectorAll('[data-open]').forEach(b => {
@@ -1506,7 +1570,12 @@
 
   // ===== EDIT MODAL =====
   function openEditModal(id) {
-    const t = tasks.find(x => x.id === id);
+    let t = tasks.find(x => x.id === id);
+    let isArchived = false;
+    if (!t) {
+      t = archivedTasks.find(x => x.id === id);
+      isArchived = true;
+    }
     if (!t) return;
     if (!Array.isArray(t.workingPoints)) t.workingPoints = [];
     if (!Array.isArray(t.tags)) t.tags = [];
@@ -1517,7 +1586,7 @@
         <div class="modal-row"><label>Title</label><input type="text" id="em-title" value="${escapeHtml(t.title)}"></div>
         <div class="modal-grid">
           <div class="modal-row"><label>Project</label><select id="em-project">${projects.map(p => `<option value="${p.id}" ${p.id===t.project?'selected':''}>${escapeHtml(p.name)}</option>`).join('')}</select></div>
-          <div class="modal-row"><label>Status</label><select id="em-status">${Object.keys(STATUS_LABELS).map(s => `<option value="${s}" ${s===t.status?'selected':''}>${STATUS_LABELS[s]}</option>`).join('')}</select></div>
+          <div class="modal-row"><label>Status</label><select id="em-status">${Object.keys(columnLabels).map(s => `<option value="${s}" ${s===t.status?'selected':''}>${columnLabels[s]}</option>`).join('')}</select></div>
           <div class="modal-row"><label>Priority</label><select id="em-priority">${['high','med','low'].map(p => `<option value="${p}" ${p===t.priority?'selected':''}>${PRIO_LABELS[p]}</option>`).join('')}</select></div>
           <div class="modal-row"><label>Due date</label><input type="date" id="em-due" value="${t.due || ''}"></div>
         </div>
@@ -1809,7 +1878,8 @@
             if (Array.isArray(remote.tasks)) tasks = remote.tasks;
             if (Array.isArray(remote.projects) && remote.projects.length > 0) projects = remote.projects;
             if (Array.isArray(remote.tags)) tags = remote.tags;
-            saveTasksLocal(); saveProjectsLocal(); saveTagsLocal();
+            if (Array.isArray(remote.archivedTasks)) archivedTasks = remote.archivedTasks;
+            saveTasksLocal(); saveProjectsLocal(); saveTagsLocal(); saveArchivedLocal();
             renderAll();
           }
           await pushToCloud();
@@ -1817,7 +1887,8 @@
           if (Array.isArray(remote.tasks)) tasks = remote.tasks;
           if (Array.isArray(remote.projects) && remote.projects.length > 0) projects = remote.projects;
           if (Array.isArray(remote.tags)) tags = remote.tags;
-          saveTasksLocal(); saveProjectsLocal(); saveTagsLocal();
+          if (Array.isArray(remote.archivedTasks)) archivedTasks = remote.archivedTasks;
+          saveTasksLocal(); saveProjectsLocal(); saveTagsLocal(); saveArchivedLocal();
           renderAll();
           sync.lastSync = new Date().toISOString(); saveSyncLocal();
           setSyncStatus('ok', 'Synced just now');
@@ -1893,10 +1964,11 @@
     // Weekly chart
     const weekly = [];
     const today = new Date(); today.setHours(0,0,0,0);
+    const allTasks = [...tasks, ...archivedTasks]; // Include archived tasks in completion count
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today); d.setDate(d.getDate() - i);
       const key = d.toISOString().slice(0,10);
-      const count = tasks.filter(t => t.completedAt && t.completedAt.slice(0,10) === key).length;
+      const count = allTasks.filter(t => t.completedAt && t.completedAt.slice(0,10) === key).length;
       weekly.push({ day: d.toLocaleDateString('en-US', { weekday: 'short' }), count, isToday: i === 0 });
     }
     const maxCount = Math.max(...weekly.map(d => d.count), 1);
@@ -1923,19 +1995,6 @@
         return `<div class="proj-row"><div class="proj-row-name">${escapeHtml(p.name)}</div><div class="proj-bar"><div class="proj-bar-seg todo" style="width:${todoPct}%"></div><div class="proj-bar-seg progress" style="width:${progPct}%"></div><div class="proj-bar-seg testing" style="width:${testPct}%"></div><div class="proj-bar-seg done" style="width:${donePct}%"></div></div><div class="proj-row-count">${total}</div></div>`;
       }).join('');
     }
-
-    // Heatmap (last 84 days = 12 weeks)
-    const heatHost = $('heatmap');
-    const cells = [];
-    const todayHm = new Date(); todayHm.setHours(0,0,0,0);
-    for (let i = 83; i >= 0; i--) {
-      const d = new Date(todayHm); d.setDate(d.getDate() - i);
-      const key = d.toISOString().slice(0,10);
-      const count = tasks.filter(t => t.completedAt && t.completedAt.slice(0,10) === key).length;
-      const level = count === 0 ? 0 : count === 1 ? 1 : count <= 3 ? 2 : count <= 6 ? 3 : 4;
-      cells.push(`<div class="heat-cell" data-level="${level}" title="${d.toLocaleDateString()}: ${count} completed"></div>`);
-    }
-    heatHost.innerHTML = cells.join('');
   }
 
   // ===== VIEW SWITCHING =====
@@ -1967,7 +2026,7 @@
 
   // ===== EXPORT / IMPORT =====
   function exportData() {
-    const data = JSON.stringify({ exported: new Date().toISOString(), projects, tasks, tags }, null, 2);
+    const data = JSON.stringify({ exported: new Date().toISOString(), projects, tasks, tags, archivedTasks }, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -1985,6 +2044,7 @@
         if (Array.isArray(data.tasks)) tasks = data.tasks;
         if (Array.isArray(data.projects) && data.projects.length > 0) projects = data.projects;
         if (Array.isArray(data.tags)) tags = data.tags;
+        if (Array.isArray(data.archivedTasks)) archivedTasks = data.archivedTasks;
         scheduleSave(); renderAll();
         alert('Import complete.');
       } catch (err) { alert('Invalid backup file'); }
@@ -1995,6 +2055,44 @@
   // ===== PRINT =====
   function printReport() {
     window.print();
+  }
+
+  // ===== ARCHIVE FUNCTIONS =====
+  function renameColumn(status) {
+    const newName = prompt(`Rename "${columnLabels[status]}" to:`, columnLabels[status]);
+    if (newName && newName.trim()) {
+      columnLabels[status] = newName.trim();
+      saveLabelsLocal();
+      renderBoard();
+    }
+  }
+
+  function toggleArchivedView() {
+    view.showArchived = !view.showArchived;
+    saveViewLocal();
+    const col = $('archived-col');
+    const board = $('board');
+    const btn = $('btn-toggle-archived');
+    if (view.showArchived) {
+      col.classList.remove('hidden');
+      board.classList.add('show-archived');
+      btn.innerHTML = `<span id="archived-icon">📂</span> Hide Archived (<span id="archived-count">${archivedTasks.length}</span>)`;
+    } else {
+      col.classList.add('hidden');
+      board.classList.remove('show-archived');
+      btn.innerHTML = `<span id="archived-icon">📦</span> Show Archived (<span id="archived-count">${archivedTasks.length}</span>)`;
+    }
+    renderBoard();
+  }
+
+  function clearArchivedTasks() {
+    if (archivedTasks.length === 0) {
+      alert('No archived tasks to delete.');
+      return;
+    }
+    if (!confirm(`Permanently delete ${archivedTasks.length} archived task(s)? This cannot be undone.`)) return;
+    archivedTasks = [];
+    scheduleSave(); renderAll();
   }
 
   // ===== SETUP =====
@@ -2019,6 +2117,11 @@
       e.target.value = '';
     });
     $('btn-print').onclick = printReport;
+    $('btn-toggle-archived').onclick = toggleArchivedView;
+    $('btn-clear-archived').onclick = clearArchivedTasks;
+    document.querySelectorAll('[data-rename-btn]').forEach(b => {
+      b.onclick = () => renameColumn(b.dataset.renameBtn);
+    });
   }
 
   // ===== INIT =====
@@ -2046,7 +2149,7 @@
   window.addEventListener('beforeunload', () => {
     if (saveTimer && syncConfigured() && window.fbDb) {
       clearTimeout(saveTimer);
-      try { window.fbDb.write(sync.secret, { projects, tasks, tags, updated: new Date().toISOString() }); } catch (e) {}
+      try { window.fbDb.write(sync.secret, { projects, tasks, tags, archivedTasks, updated: new Date().toISOString() }); } catch (e) {}
     }
   });
 })();
